@@ -1,3 +1,4 @@
 # JetRacer-ROS
 
-- [Chapter 1](./chapter_1.md)
+- [Hardware](./01_Hardware/README.md)
+- [Software](./02_Sofwware/README.md)

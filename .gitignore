@@ -1,2 +1,5 @@
+# balenaEtcher
 *.AppImage
+
+# mdBook
 book
