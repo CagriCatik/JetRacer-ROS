@@ -1,4 +1,3 @@
-
 # Vehicle Movement Control
 
 ## Step 1: Add Serial User Group
