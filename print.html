@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="01_Hardware/index.html"><strong aria-hidden="true">1.</strong> Hardware</a></li><li class="chapter-item expanded "><a href="02_Sofwware/index.html"><strong aria-hidden="true">2.</strong> Software</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="00_installation/01_ros-installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="01_hardware/index.html"><strong aria-hidden="true">2.</strong> Hardware</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01_hardware/01_pcb.html"><strong aria-hidden="true">2.1.</strong> PCB</a></li><li class="chapter-item expanded "><a href="01_hardware/02_schematic.html"><strong aria-hidden="true">2.2.</strong> Schematic</a></li></ol></li><li class="chapter-item expanded "><a href="02_software/index.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded "><a href="03_tutorials/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="03_tutorials/01_vehicle-movement-control.html"><strong aria-hidden="true">4.1.</strong> Vehicle Movement Control</a></li><li class="chapter-item expanded "><a href="03_tutorials/02_ros-node-topics.html"><strong aria-hidden="true">4.2.</strong> ROS Node Topics</a></li><li class="chapter-item expanded "><a href="03_tutorials/03_odometer-calibration.html"><strong aria-hidden="true">4.3.</strong> Odometer Calibration</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -174,8 +174,986 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="hardware"><a class="header" href="#hardware">Hardware</a></h1>
+                        <h1 id="jetracer-ros-ai-kit-advanced-tutorial-v-install-ros-system-on-jetson-nano--environment-configuration"><a class="header" href="#jetracer-ros-ai-kit-advanced-tutorial-v-install-ros-system-on-jetson-nano--environment-configuration">JetRacer ROS AI Kit Advanced Tutorial V: Install ROS System on Jetson Nano &amp; Environment Configuration</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>This guide provides comprehensive instructions for installing the ROS system and configuring the environment on a Jetson Nano. While using the pre-configured image provided is recommended, these steps will help you set up the system manually. Ensure a stable internet connection throughout the installation and configuration process. The tutorial uses Ubuntu 18.04 and ROS Melodic.</p>
+<h2 id="step-1-jetson-nano-programming-system"><a class="header" href="#step-1-jetson-nano-programming-system">Step 1: Jetson Nano Programming System</a></h2>
+<ol>
+<li>
+<p><strong>Download Jetbot Image:</strong></p>
+<ul>
+<li>Jetbot website: <a href="https://github.com/NVIDIA-AI-IOT/jetracer">Jetbot GitHub</a></li>
+<li>4G image version: <code>jetcard_nano-4gb-jp451.zip</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Prepare SD Card:</strong></p>
+<ul>
+<li>Use an SD card with at least 64GB capacity.</li>
+<li>Insert the SD card into the Jetson Nano.</li>
+<li>Connect the power to enable the device.</li>
+</ul>
+</li>
+<li>
+<p><strong>Network Configuration:</strong></p>
+<ul>
+<li>
+<p>Connect the network cable and log in via SSH.</p>
+</li>
+<li>
+<p>Scan available WiFi networks:</p>
+<pre><code class="language-bash">sudo nmcli device wifi list
+</code></pre>
+</li>
+<li>
+<p>Connect to WiFi:</p>
+<pre><code class="language-bash">sudo nmcli device wifi connect &lt;ssid_name&gt; password &lt;password&gt;
+</code></pre>
+</li>
+<li>
+<p>Query the IP of wlan0 on the WiFi interface:</p>
+<pre><code class="language-bash">ifconfig
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-2-configure-ros-software-repository"><a class="header" href="#step-2-configure-ros-software-repository">Step 2: Configure ROS Software Repository</a></h2>
+<ol>
+<li>
+<p><strong>Add ROS repository:</strong></p>
+<pre><code class="language-bash">sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" &gt; /etc/apt/sources.list.d/ros-latest.list'
+</code></pre>
+</li>
+<li>
+<p><strong>Add repository keys:</strong></p>
+<pre><code class="language-bash">sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+</code></pre>
+</li>
+</ol>
+<h2 id="step-3-install-ros-melodic"><a class="header" href="#step-3-install-ros-melodic">Step 3: Install ROS Melodic</a></h2>
+<ol>
+<li>
+<p><strong>Update source list:</strong></p>
+<pre><code class="language-bash">sudo apt-get update
+</code></pre>
+</li>
+<li>
+<p><strong>Install Desktop-Full version of ROS:</strong></p>
+<pre><code class="language-bash">sudo apt install ros-melodic-desktop-full
+</code></pre>
+</li>
+</ol>
+<h2 id="step-4-add-environment-variables-and-install-ros-dependencies"><a class="header" href="#step-4-add-environment-variables-and-install-ros-dependencies">Step 4: Add Environment Variables and Install ROS Dependencies</a></h2>
+<ol>
+<li>
+<p><strong>Add environment variables:</strong></p>
+<pre><code class="language-bash">echo "source /opt/ros/melodic/setup.bash" &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+</li>
+<li>
+<p><strong>Install dependencies:</strong></p>
+<pre><code class="language-bash">sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
+</code></pre>
+</li>
+</ol>
+<h2 id="step-5-initialize-rosdep"><a class="header" href="#step-5-initialize-rosdep">Step 5: Initialize <code>rosdep</code></a></h2>
+<ol>
+<li>
+<p><strong>Install <code>rosdep</code>:</strong></p>
+<pre><code class="language-bash">sudo apt install python-rosdep
+</code></pre>
+</li>
+<li>
+<p><strong>Initialize and update <code>rosdep</code>:</strong></p>
+<pre><code class="language-bash">sudo rosdep init
+rosdep update
+</code></pre>
+</li>
+</ol>
+<h2 id="step-6-verify-the-ros-environment"><a class="header" href="#step-6-verify-the-ros-environment">Step 6: Verify the ROS Environment</a></h2>
+<ol>
+<li>
+<p><strong>Start ROS Master:</strong></p>
+<pre><code class="language-bash">roscore
+</code></pre>
+</li>
+</ol>
+<h2 id="step-7-set-up-workspace"><a class="header" href="#step-7-set-up-workspace">Step 7: Set up Workspace</a></h2>
+<ol>
+<li>
+<p><strong>Create and compile catkin workspace:</strong></p>
+<pre><code class="language-bash">mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws
+catkin_make
+sudo sh -c 'echo "source ~/catkin_ws/devel/setup.bash" &gt;&gt; ~/.bashrc'
+source ~/.bashrc
+</code></pre>
+</li>
+</ol>
+<h2 id="step-8-download--compile-jetracer-ros"><a class="header" href="#step-8-download--compile-jetracer-ros">Step 8: Download &amp; Compile JetRacer ROS</a></h2>
+<ol>
+<li>
+<p><strong>Clone JetRacer ROS repository and compile:</strong></p>
+<pre><code class="language-bash">cd ~/catkin_ws/src
+git clone https://github.com/waveshare/jetracer_ros.git
+cd ~/catkin_ws
+catkin_make
+source ~/catkin_ws/devel/setup.bash
+</code></pre>
+</li>
+</ol>
+<h2 id="step-9-install-dependency-libraries"><a class="header" href="#step-9-install-dependency-libraries">Step 9: Install Dependency Libraries</a></h2>
+<ol>
+<li>
+<p><strong>Install various ROS libraries:</strong></p>
+<pre><code class="language-bash">sudo apt-get install ros-melodic-robot-pose-ekf ros-melodic-gmapping ros-melodic-hector-slam ros-melodic-slam-karto ros-melodic-cartographer-ros ros-melodic-navigation ros-melodic-teb-local-planner ros-melodic-audio-common
+</code></pre>
+</li>
+</ol>
+<h2 id="step-10-install-camera-function-package"><a class="header" href="#step-10-install-camera-function-package">Step 10: Install Camera Function Package</a></h2>
+<ol>
+<li>
+<p><strong>Install GStreamer and related packages:</strong></p>
+<pre><code class="language-bash">sudo apt-get install gstreamer1.0-tools libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev
+</code></pre>
+</li>
+<li>
+<p><strong>Clone camera repositories and compile:</strong></p>
+<pre><code class="language-bash">cd ~/catkin_ws/src
+git clone https://github.com/peter-moran/jetson_csi_cam.git 
+git clone https://github.com/ros-drivers/gscam.git
+cd gscam
+sed -e "s/EXTRA_CMAKE_FLAGS = -DUSE_ROSBUILD:BOOL=1$/EXTRA_CMAKE_FLAGS = -DUSE_ROSBUILD:BOOL=1 -DGSTREAMER_VERSION_1_x=On/" -i Makefile
+cd ~/catkin_ws
+catkin_make
+source ~/catkin_ws/devel/setup.bash
+</code></pre>
+</li>
+<li>
+<p><strong>Adjust camera settings if the image is too red:</strong></p>
+<pre><code class="language-bash">wget https://files.waveshare.com/upload/e/eb/Camera_overrides.tar.gz
+tar zxvf Camera_overrides.tar.gz 
+sudo cp camera_overrides.isp /var/nvidia/nvcam/settings/
+sudo chmod 664 /var/nvidia/nvcam/settings/camera_overrides.isp
+sudo chown root:root /var/nvidia/nvcam/settings/camera_overrides.isp
+</code></pre>
+</li>
+</ol>
+<h2 id="step-11-install-the-lidar-function-package"><a class="header" href="#step-11-install-the-lidar-function-package">Step 11: Install the Lidar Function Package</a></h2>
+<ol>
+<li>
+<p><strong>Clone Lidar repository and compile:</strong></p>
+<pre><code class="language-bash">cd ~/catkin_ws/src
+git clone https://github.com/Slamtec/rplidar_ros.git
+cd ~/catkin_ws
+catkin_make
+source ~/catkin_ws/devel/setup.bash
+</code></pre>
+</li>
+</ol>
+<p>By now, the ROS environment of the Jetbot robot should be mostly completed. If you need an intelligent voice function, additional settings will be required.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hardware"><a class="header" href="#hardware">Hardware</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="pcb-design"><a class="header" href="#pcb-design"><strong>PCB Design</strong></a></h1>
+<h2 id="1-audio-amplifier"><a class="header" href="#1-audio-amplifier"><strong>1. Audio Amplifier</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: This section of the PCB drives the output to the onboard speaker (22). It takes low-power audio signals and amplifies them to drive the speaker effectively.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: Likely a Class D or Class AB audio amplifier IC such as the <strong>MAX98357</strong> or <strong>TPA3110</strong>, which are common choices for compact, efficient audio amplification.</li>
+<li><strong>Passive Components</strong>: Capacitors for filtering, resistors for gain control, and inductors (if using Class D) to smooth output.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: High efficiency and low distortion are critical for portable applications. If a Class D amplifier is used, it provides low power dissipation with minimal heat generation.</li>
+</ul>
+<h2 id="2-usb-sound-card"><a class="header" href="#2-usb-sound-card"><strong>2. USB Sound Card</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Allows for audio I/O over a USB interface. This is commonly used to interface with external devices for sound recording or playback.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: A common USB audio codec, such as the <strong>PCM2900</strong> or <strong>CM108B</strong>, which supports USB audio class.</li>
+<li><strong>Crystals</strong>: A 12 MHz crystal for USB clock generation.</li>
+<li><strong>Passives</strong>: Decoupling capacitors and resistors for proper signal integrity on the USB differential pairs (D+/D-).</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Proper grounding and USB data line routing are essential to prevent noise from affecting audio quality.</li>
+</ul>
+<h2 id="3-battery-protection-circuit"><a class="header" href="#3-battery-protection-circuit"><strong>3. Battery Protection Circuit</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Protects the lithium-ion battery from overcharge, over-discharge, overcurrent, and short-circuit conditions.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: A battery protection IC such as <strong>BQ29700</strong> for 1S or <strong>BQ76930</strong> for 2-3 cell configurations.</li>
+<li><strong>MOSFETs</strong>: Used to control the disconnection of the battery in case of overvoltage or short-circuit.</li>
+<li><strong>Resistors and Capacitors</strong>: Sensing resistors for current detection, capacitors for noise filtering.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Ensure the battery protection IC matches the chemistry and cell count of the battery pack (18650 cells). Low Rds(on) MOSFETs are selected to minimize voltage drop and heat.</li>
+</ul>
+<h2 id="4-equalizing-charge"><a class="header" href="#4-equalizing-charge"><strong>4. Equalizing Charge</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Balances the charge between the cells of the battery pack (if more than one 18650 cell is used), ensuring that all cells charge to the same voltage.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: A battery balancer IC such as <strong>BQ29209</strong> for cell balancing.</li>
+<li><strong>Shunt Resistors</strong>: Used to discharge cells that are overcharged relative to others.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Critical for maintaining battery health and maximizing the lifespan of multi-cell battery packs.</li>
+</ul>
+<h2 id="5-motherboard-power-supply-5a-maximum"><a class="header" href="#5-motherboard-power-supply-5a-maximum"><strong>5. Motherboard Power Supply (5A Maximum)</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Supplies regulated power (likely 5V, 3.3V) to all the components on the PCB. Supports up to 5A, which indicates high current loads, possibly from motors and other power-hungry components.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: Buck or boost converter IC such as <strong>LM2675</strong> or <strong>TPS54331</strong> for efficient power conversion.</li>
+<li><strong>Inductor</strong>: Used in switching power supplies for energy storage and filtering.</li>
+<li><strong>Capacitors</strong>: Electrolytic and ceramic capacitors for input/output voltage smoothing.</li>
+<li><strong>Diodes</strong>: Schottky diodes to handle the flyback in switch-mode power supplies.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Ensure that thermal dissipation is well-managed. Use low ESR capacitors for stability and noise reduction. A heat sink might be required for high-load applications.</li>
+</ul>
+<h2 id="6-imu-attitude-sensor"><a class="header" href="#6-imu-attitude-sensor"><strong>6. IMU Attitude Sensor</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Measures the 3D orientation, acceleration, and angular velocity of the system, crucial for motion tracking, stabilization, and navigation.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: Common IMUs include <strong>MPU-6050</strong>, <strong>ICM-20948</strong>, or <strong>LSM6DS3</strong>, which are six-axis (gyro + accelerometer) or nine-axis (gyro + accelerometer + magnetometer) sensors.</li>
+<li><strong>Crystals</strong>: May use a crystal for timing or rely on the system clock.</li>
+<li><strong>Resistors</strong>: Pull-up resistors on I2C lines for communication.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Proper placement and vibration damping are important to ensure accurate measurements. Shielding might be necessary to avoid electromagnetic interference (EMI).</li>
+</ul>
+<h2 id="7-usb-hub"><a class="header" href="#7-usb-hub"><strong>7. USB Hub</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Expands the USB capability by providing multiple USB ports to connect additional peripherals.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: A typical USB hub controller, such as <strong>FE1.1s</strong> or <strong>TUSB4041</strong>, which can handle multiple downstream USB ports.</li>
+<li><strong>Passives</strong>: Decoupling capacitors and termination resistors for signal integrity.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Ensure proper routing of USB differential pairs, maintain impedance matching, and keep traces short to prevent signal degradation.</li>
+</ul>
+<h2 id="8-raspberry-pi-rp2040-microcontroller"><a class="header" href="#8-raspberry-pi-rp2040-microcontroller"><strong>8. Raspberry Pi RP2040 Microcontroller</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Serves as the main processing unit of the PCB, handling data processing, control, and communication between various peripherals.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>RP2040 SoC</strong>: Dual-core ARM Cortex-M0+ processors running at 133 MHz, with 264KB SRAM and a wide range of GPIO pins.</li>
+<li><strong>External Flash Memory</strong>: Typically, an <strong>8MB QSPI flash</strong> for storing firmware and program data.</li>
+<li><strong>Decoupling Capacitors</strong>: Placed near the power pins to reduce noise and ensure stable operation.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Adequate cooling and bypassing are essential. RP2040 supports a wide range of interfaces (I2C, SPI, UART) for easy expansion.</li>
+</ul>
+<h2 id="9-motor-driver"><a class="header" href="#9-motor-driver"><strong>9. Motor Driver</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Controls the motors connected to the motor ports (23), allowing for speed, direction, and torque control.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: H-bridge motor driver IC such as <strong>L298N</strong> or more compact options like <strong>DRV8833</strong>.</li>
+<li><strong>MOSFETs</strong>: High-current MOSFETs might be used for switching high currents in PWM mode.</li>
+<li><strong>Diodes</strong>: Flyback diodes to protect the circuit from voltage spikes generated by inductive loads (the motor).</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Proper heat dissipation and current sensing for motor feedback are critical for robust operation.</li>
+</ul>
+<h2 id="10-battery-voltage-and-current-monitoring"><a class="header" href="#10-battery-voltage-and-current-monitoring"><strong>10. Battery Voltage and Current Monitoring</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Monitors the voltage and current from the 18650 battery pack to ensure proper charging and discharging cycles.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: Battery monitoring IC such as <strong>INA219</strong> for high-accuracy current and voltage sensing.</li>
+<li><strong>Shunt Resistors</strong>: Used for current sensing with minimal voltage drop.</li>
+<li><strong>Analog-to-Digital Converter (ADC)</strong>: Converts the analog voltage/current values to digital signals for processing.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Ensure the sense resistors are low enough to minimize power loss but still provide accurate measurements.</li>
+</ul>
+<h2 id="11-dual-mems-silicon-microphone"><a class="header" href="#11-dual-mems-silicon-microphone"><strong>11. Dual MEMS Silicon Microphone</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Captures audio from the environment, typically for voice recognition or sound sensing.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>IC</strong>: MEMS microphones such as <strong>SPH0645LM4H</strong> or <strong>ICS-43432</strong>, which convert sound waves into electrical signals.</li>
+<li><strong>Amplifiers</strong>: Pre-amplification might be required before sending the signal to the microcontroller or USB sound card.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Placement of microphones is critical for noise isolation. Shielding from high-frequency signals will prevent interference.</li>
+</ul>
+<h2 id="12-lidar-interface"><a class="header" href="#12-lidar-interface"><strong>12. Lidar Interface</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Interfaces with an external LIDAR sensor for distance measurement or object detection.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>Connector</strong>: Likely a serial (UART, I2C) or SPI interface to communicate with the LIDAR sensor.</li>
+<li><strong>Resistors and Capacitors</strong>: Pull-ups for I2C lines, decoupling capacitors for noise reduction.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Ensure the interface supports the specific communication protocol of the LIDAR sensor being used.</li>
+</ul>
+<h2 id="13-lidar-power-switch"><a class="header" href="#13-lidar-power-switch"><strong>13. Lidar Power Switch</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Switches the power to the LIDAR sensor, allowing it to be turned on or off as needed to save power.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>MOSFET</strong>: A low Rds(on) MOSFET for switching the LIDAR’s power supply.</li>
+<li><strong>Control Logic</strong>: Controlled by GPIO from the microcontroller or a dedicated power management IC.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Ensure the MOSFET can handle the LIDAR’s power consumption and is efficient to minimize heat generation.</li>
+</ul>
+<h2 id="14-charging-port"><a class="header" href="#14-charging-port"><strong>14. Charging Port</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Provides a charging interface for the onboard 18650 battery pack.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>Connector</strong>: USB Type-C or Micro-USB for external power input.</li>
+<li><strong>IC</strong>: Battery charger IC, such as <strong>BQ24079</strong>, which supports lithium-ion charging.</li>
+<li><strong>Inductors and Capacitors</strong>: Used in conjunction with the charging IC to ensure stable</li>
+</ul>
+</li>
+</ul>
+<p>current and voltage regulation.</p>
+<ul>
+<li><strong>Considerations</strong>: The charging circuit should handle overvoltage protection and current limiting to safely charge the battery.</li>
+</ul>
+<h2 id="15-oled-display"><a class="header" href="#15-oled-display"><strong>15. OLED Display</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Displays system information such as battery levels, status updates, or user interaction data.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>Display Module</strong>: OLED screen with typical sizes of 128x64 pixels. Common driver ICs are <strong>SSD1306</strong>.</li>
+<li><strong>Interface</strong>: I2C or SPI for communication with the microcontroller.</li>
+<li><strong>Resistors</strong>: Pull-ups for the I2C lines if required.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Ensure the display’s power consumption is managed, as OLED displays can draw significant current.</li>
+</ul>
+<h2 id="16-pogo-pin"><a class="header" href="#16-pogo-pin"><strong>16. Pogo Pin</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Provides a temporary connection point for development, testing, or external modules.</li>
+<li><strong>Key Components</strong>: Pogo pin headers with spring-loaded connectors.</li>
+<li><strong>Considerations</strong>: Ensure strong mechanical stability and reliable contact for testing or programming.</li>
+</ul>
+<h2 id="17-power-switch"><a class="header" href="#17-power-switch"><strong>17. Power Switch</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Powers the entire system on or off.</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>Switch</strong>: SPST (Single Pole Single Throw) or DPST switch for high-current loads.</li>
+<li><strong>MOSFET</strong>: Could be used in conjunction with a soft-start circuit to avoid inrush current.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Rated for the total system power draw.</li>
+</ul>
+<h2 id="18-reset-button"><a class="header" href="#18-reset-button"><strong>18. Reset Button</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Resets the microcontroller (RP2040) or the entire system.</li>
+<li><strong>Key Components</strong>: Momentary push-button connected to the reset line of the microcontroller.</li>
+<li><strong>Considerations</strong>: Debouncing the reset button to prevent accidental multiple resets.</li>
+</ul>
+<h2 id="19-download-button"><a class="header" href="#19-download-button"><strong>19. Download Button</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Used to trigger the bootloader mode for firmware updates on the RP2040.</li>
+<li><strong>Key Components</strong>: Momentary switch tied to a GPIO or the BOOTSEL pin of the RP2040.</li>
+<li><strong>Considerations</strong>: Ensure proper pull-down resistors to avoid false triggering.</li>
+</ul>
+<h2 id="20-type-c-connector"><a class="header" href="#20-type-c-connector"><strong>20. Type-C Connector</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Provides a modern USB interface for power and data transfer.</li>
+<li><strong>Key Components</strong>: USB Type-C connector.</li>
+<li><strong>Considerations</strong>: Ensure proper routing for the differential pairs (D+/D-) and use ESD protection diodes.</li>
+</ul>
+<h2 id="21-speaker-volume-button"><a class="header" href="#21-speaker-volume-button"><strong>21. Speaker Volume Button</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Adjusts the output volume of the audio amplifier (1).</li>
+<li><strong>Key Components</strong>:
+<ul>
+<li><strong>Potentiometer</strong>: Analog volume control or a digital potentiometer IC like the <strong>MCP4018</strong>.</li>
+</ul>
+</li>
+<li><strong>Considerations</strong>: Ensure that it is accessible and well-calibrated to the audio amplifier’s input range.</li>
+</ul>
+<h2 id="22-speaker"><a class="header" href="#22-speaker"><strong>22. Speaker</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Outputs sound driven by the audio amplifier.</li>
+<li><strong>Key Components</strong>: A small electromagnetic speaker or piezoelectric element.</li>
+<li><strong>Considerations</strong>: Match the impedance with the amplifier’s output for optimal performance.</li>
+</ul>
+<h2 id="23-motor-ports"><a class="header" href="#23-motor-ports"><strong>23. Motor Ports</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Connects motors to the motor driver circuit.</li>
+<li><strong>Key Components</strong>: JST or similar connectors to ensure a secure connection.</li>
+<li><strong>Considerations</strong>: Ensure the motor driver IC can handle the voltage and current requirements of the connected motors.</li>
+</ul>
+<h2 id="24-18650-battery-holder"><a class="header" href="#24-18650-battery-holder"><strong>24. 18650 Battery Holder</strong></a></h2>
+<ul>
+<li><strong>Function</strong>: Holds two 18650 cells that power the entire PCB.</li>
+<li><strong>Key Components</strong>: Spring-loaded battery holder.</li>
+<li><strong>Considerations</strong>: Ensure proper connection and safety measures, such as fuses, to prevent shorts or thermal runaway.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="schematic"><a class="header" href="#schematic">Schematic</a></h1>
+<h2 id="1-power-supply-and-management"><a class="header" href="#1-power-supply-and-management">1. Power Supply and Management</a></h2>
+<ul>
+<li>
+<p><strong>Power Input (P1, P2, P3, P4):</strong></p>
+<ul>
+<li>Headers for various power inputs (5V, 12V) and ground connections.</li>
+<li>Voltage regulators such as U20 (RT9193-1.8PB) to provide 1.8V and 3.3V outputs.</li>
+</ul>
+</li>
+<li>
+<p><strong>Capacitors:</strong></p>
+<ul>
+<li>Various capacitors (C90, C91, C92, etc.) for filtering and stabilizing the power supply.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-microcontroller-unit-mcu"><a class="header" href="#2-microcontroller-unit-mcu">2. Microcontroller Unit (MCU)</a></h2>
+<ul>
+<li><strong>RP2040 (U19):</strong>
+<ul>
+<li>The main microcontroller with GPIO pins for various I/O operations.</li>
+<li>Connected to an external flash memory (U17 - W25Qxx) for additional storage.</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-communication-interfaces"><a class="header" href="#3-communication-interfaces">3. Communication Interfaces</a></h2>
+<ul>
+<li>
+<p><strong>I2C Bus:</strong></p>
+<ul>
+<li>Multiple I2C devices connected to SDA and SCL lines.</li>
+<li>Includes a header (P5) for connecting external I2C devices.</li>
+</ul>
+</li>
+<li>
+<p><strong>SPI Bus:</strong></p>
+<ul>
+<li>Used for high-speed communication with devices such as the MPU9250/ICM20948 (U21) sensor.</li>
+<li>Flash memory (U17) also communicates over SPI.</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-sensors-and-peripherals"><a class="header" href="#4-sensors-and-peripherals">4. Sensors and Peripherals</a></h2>
+<ul>
+<li>
+<p><strong>INA219 (INA1):</strong></p>
+<ul>
+<li>Current sensor for monitoring power consumption.</li>
+<li>Connected to I2C bus with address 0x41.</li>
+</ul>
+</li>
+<li>
+<p><strong>MPU9250/ICM20948 (U21):</strong></p>
+<ul>
+<li>9-axis IMU sensor for motion tracking, connected via I2C and SPI.</li>
+</ul>
+</li>
+<li>
+<p><strong>SSD1306 (U15):</strong></p>
+<ul>
+<li>OLED display driver for a 128x32 pixel screen.</li>
+<li>Connected via I2C for displaying information.</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-motor-drivers"><a class="header" href="#5-motor-drivers">5. Motor Drivers</a></h2>
+<ul>
+<li><strong>DRV8870 (DRV1, DRV2):</strong>
+<ul>
+<li>Dual motor driver circuits for controlling the motors of the JetBot.</li>
+<li>Controlled via GPIO pins for direction and speed control.</li>
+<li>Includes current sensing for motor feedback.</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-connectors-and-headers"><a class="header" href="#6-connectors-and-headers">6. Connectors and Headers</a></h2>
+<ul>
+<li><strong>GPIO Headers (H1, H2, P6):</strong>
+<ul>
+<li>Headers for accessing GPIO pins for additional peripherals and debugging.</li>
+<li>Pins for SWD (Serial Wire Debug) for programming and debugging the MCU.</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-leds-and-indicators"><a class="header" href="#7-leds-and-indicators">7. LEDs and Indicators</a></h2>
+<ul>
+<li><strong>LED1:</strong>
+<ul>
+<li>Status LED controlled via GPIO.</li>
+</ul>
+</li>
+</ul>
+<h2 id="8-miscellaneous-components"><a class="header" href="#8-miscellaneous-components">8. Miscellaneous Components</a></h2>
+<ul>
+<li><strong>Resistors and Capacitors:</strong>
+<ul>
+<li>Various resistors (R43, R44, R45, etc.) and capacitors (C78, C79, etc.) used for pull-up/down, filtering, and stabilization.</li>
+<li>Resistors in series with LEDs for current limiting.</li>
+</ul>
+</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="software"><a class="header" href="#software">Software</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tutorial"><a class="header" href="#tutorial">Tutorial</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vehicle-movement-control"><a class="header" href="#vehicle-movement-control">Vehicle Movement Control</a></h1>
+<h2 id="step-1-add-serial-user-group"><a class="header" href="#step-1-add-serial-user-group">Step 1: Add Serial User Group</a></h2>
+<ol>
+<li>
+<p><strong>Check Driver Board Connection</strong>
+Enter the command <code>ls /dev</code> on the Jetson Nano to check whether the driver board is connected to Jetson Nano normally and whether ttyACM0 and ttyACM1 devices are found.</p>
+<ul>
+<li><code>ttyACM0</code> is used to communicate with the microcontroller.</li>
+<li><code>ttyACM1</code> is used to communicate with the radar.</li>
+</ul>
+<pre><code class="language-bash">ls /dev
+</code></pre>
+</li>
+<li>
+<p><strong>Add the Serial Port User Group</strong>
+Enter the following commands to add the serial port user group. If you are using a configured system with already added permissions, you can skip this step.</p>
+<pre><code class="language-bash">ls -l /dev/ttyACM*            # View the serial port user group as dialout
+id -Gn                        # View the user groups that the current user belongs to, the first one is the current user
+sudo adduser jetbot dialout   # Add the current user to the user group dialout where the serial port is located
+</code></pre>
+</li>
+<li>
+<p><strong>Restart Jetson Nano</strong>
+Enter the command <code>sudo reboot</code> to restart. The password is <code>jetson</code>.</p>
+<pre><code class="language-bash">sudo reboot   # Restart Jetson Nano
+</code></pre>
+<p><strong>Note</strong>: The addition of the user to the dialout group takes effect only after restarting. Without serial port permissions, the robot chassis node will report an error after booting up.</p>
+</li>
+</ol>
+<h2 id="step-2-start-the-robot-chassis-control-node"><a class="header" href="#step-2-start-the-robot-chassis-control-node">Step 2: Start the Robot Chassis Control Node</a></h2>
+<ol>
+<li>
+<p><strong>Start the Robot Master Node</strong>
+Connect to the robot via SSH, open the terminal, and enter the following command to start the robot master node.</p>
+<pre><code class="language-bash">roscore   # Start the robot master node
+</code></pre>
+</li>
+<li>
+<p><strong>Start the Robot Chassis Node</strong>
+Enter the following command to start the robot chassis node. The command will also automatically start the master node if it’s not already running.</p>
+<pre><code class="language-bash">roslaunch jetracer jetracer.launch   # Start the robot chassis node
+</code></pre>
+</li>
+<li>
+<p><strong>Verify Multi-Machine Communication</strong>
+Open the Ubuntu virtual machine terminal and enter the following command to verify that the multi-machine communication connection is normal.</p>
+<pre><code class="language-bash">rostopic list
+</code></pre>
+<p>If the expected topics appear, multi-device communication is successful. If not, recheck the IP and hostname configurations and ensure they are connected to the same WiFi.</p>
+<ul>
+<li><code>/cmd_vel</code>: Robot movement control topic.</li>
+<li><code>/imu</code>: Robot IMU topic.</li>
+<li><code>/motor/*</code>: Actual encoded speed and set speed of the left and right motors.</li>
+<li><code>/odom</code>: Robot odometer.</li>
+<li><code>/odom_combined</code>: Robot fusion odometer, combining encoded odometer with IMU data.</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-3-start-topic-publishing-node-control"><a class="header" href="#step-3-start-topic-publishing-node-control">Step 3: Start Topic Publishing Node Control</a></h2>
+<ol>
+<li>
+<p><strong>Start the Topic Publishing Node</strong>
+Keep the robot chassis node running and place the car on the ground. Open a terminal in the Ubuntu virtual machine and enter the following command.</p>
+<pre><code class="language-bash">rosrun rqt_publisher rqt_publisher   # Start topic publishing node
+</code></pre>
+</li>
+<li>
+<p><strong>Publish a Topic</strong>
+In the pop-up window, select the topic <code>/cmd_vel</code> and click "+" to create a new topic. Configure the following:</p>
+<ul>
+<li><code>linear-&gt;x</code>: Linear speed of the robot (-1.2m/s to 1.2m/s)</li>
+<li><code>angular-&gt;z</code>: Steering angle of the robot’s front tires (-0.6 radians to 0.6 radians)</li>
+</ul>
+<p>Change <code>linear.x</code> to 0.5, right-click, and select "Publish selected once" to make the robot move forward 0.5 meters. Setting <code>linear.x</code> to 0 and <code>angular.z</code> to 0.6 will make the robot turn left.</p>
+<p><strong>Note</strong>: Ensure to select the <code>Twist</code> type for <code>/cmd_vel</code>.</p>
+</li>
+<li>
+<p><strong>Close the Topic Publishing Node</strong>
+Press <code>Ctrl+C</code> to close the topic publishing node.</p>
+</li>
+<li>
+<p><strong>View Topic Information</strong>
+Re-open a terminal on the robot side and enter the following command to view the topic information of the car movement.</p>
+<pre><code class="language-bash">rostopic echo /cmd_vel   # Display /cmd_vel topic
+</code></pre>
+<p><strong>Special Note</strong>: <code>angular-&gt;z</code> is the steering angle of the robot's tires, not the angular velocity.</p>
+</li>
+</ol>
+<h2 id="step-4-control-the-robot-movement-with-keyboard"><a class="header" href="#step-4-control-the-robot-movement-with-keyboard">Step 4: Control the Robot Movement with Keyboard</a></h2>
+<ol>
+<li>
+<p><strong>Open Keyboard Control Topic Node</strong>
+Press <code>Ctrl+Alt+t</code> on the Ubuntu virtual machine to open a new terminal and enter the following command.</p>
+<pre><code class="language-bash">roslaunch jetracer keyboard.launch
+</code></pre>
+</li>
+<li>
+<p><strong>Control the Robot</strong>
+Use the arrow keys to control the robot’s movement. The movement data can be viewed in the topics received by the robot terminal.</p>
+</li>
+<li>
+<p><strong>Interrupt Node Running</strong>
+Press <code>Ctrl+C</code> to stop the node.</p>
+<p><strong>Note</strong>: The controls are only valid when the robot master node and the robot chassis node are activated. If the robot does not respond, check the node operation and multi-machine communication.</p>
+</li>
+</ol>
+<h2 id="step-5-connect-the-virtual-machine-to-the-gamepad-control"><a class="header" href="#step-5-connect-the-virtual-machine-to-the-gamepad-control">Step 5: Connect the Virtual Machine to the Gamepad Control</a></h2>
+<ol>
+<li>
+<p><strong>Check Gamepad Connection</strong>
+Connect the USB receiver of the gamepad to the computer. A box will pop up, select "Connect to Virtual Machine -&gt; Ubuntu JetRacer."</p>
+</li>
+<li>
+<p><strong>Test Gamepad Connection</strong>
+Run the following command in the virtual machine to check if the gamepad is connected.</p>
+<pre><code class="language-bash">ls /dev/input/
+</code></pre>
+<p><code>js0</code> represents the game joystick handle. Run the following command to test the game handle.</p>
+<pre><code class="language-bash">jstest /dev/input/js0
+</code></pre>
+<p>Press different buttons on the remote control handle to verify the corresponding button values change.</p>
+</li>
+<li>
+<p><strong>Start Gamepad Control Node</strong>
+Enter the following command in the virtual machine to start the gamepad control node.</p>
+<pre><code class="language-bash">roslaunch jetracer joy.launch
+</code></pre>
+</li>
+<li>
+<p><strong>Control the Robot with Gamepad</strong>
+Turn on the power of the handle, press the HOME button, and a red light will turn on. Press and hold the L1 button while controlling the left joystick for steering and the right joystick for forward and backward movement. Release the L1 key to stop the robot.</p>
+<p><strong>Note</strong>: If the remote control fails, open the program file to adjust the values.</p>
+<pre><code class="language-bash">sudo nano ~/catkin_ws/src/jetracer_ros/scripts/teleop_joy.py   # Open the remote control program file
+</code></pre>
+</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="viewing-node-topics-with-ros"><a class="header" href="#viewing-node-topics-with-ros">Viewing Node Topics with ROS</a></h1>
+<p>This comprehensive tutorial will guide you through the process of viewing node topics with ROS using the JetRacer ROS AI Kit. The steps include checking node topics, displaying data waveforms, adjusting PID parameters, viewing robot odometer information, understanding coordinate relationships, and viewing IMU information.</p>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ol>
+<li>Ensure you have completed the previous tutorials on assembling the JetRacer, installing the Jetson Nano image, installing the Ubuntu virtual image, configuring multi-machine communication, and controlling robot movement.</li>
+<li>Ensure your JetRacer and computer are connected to the same WiFi network.</li>
+</ol>
+<h2 id="step-1-check-node-topics"><a class="header" href="#step-1-check-node-topics">Step 1: Check Node Topics</a></h2>
+<ol>
+<li>
+<p><strong>Start the Robot Chassis Node:</strong></p>
+<ul>
+<li>
+<p>Connect to the JetRacer via SSH to open the terminal.</p>
+</li>
+<li>
+<p>Enter the following command to start the robot chassis node:</p>
+<pre><code class="language-bash">roslaunch jetracer jetracer.launch
+</code></pre>
+<p><strong>Note:</strong> The robot chassis node cannot be restarted repeatedly. If the previous chassis node is not closed, it does not need to be restarted.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>View Chassis Node Topics:</strong></p>
+<ul>
+<li>
+<p>Open the terminal in the Ubuntu virtual machine.</p>
+</li>
+<li>
+<p>Enter the following command to view the topics of the chassis node:</p>
+<pre><code class="language-bash">rostopic list
+</code></pre>
+<p>If the topics are displayed correctly, it means that multi-device communication is successful. If not, check the IP and hostname configurations and ensure both devices are on the same WiFi network.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-2-display-data-waveform-via-rqt_plot"><a class="header" href="#step-2-display-data-waveform-via-rqt_plot">Step 2: Display Data Waveform via <code>rqt_plot</code></a></h2>
+<ol>
+<li>
+<p><strong>Open <code>rqt_plot</code>:</strong></p>
+<ul>
+<li>
+<p>In the virtual machine terminal, run the following command to open the data waveform display tool:</p>
+<pre><code class="language-bash">rosrun rqt_plot rqt_plot
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Add Motor Topics:</strong></p>
+<ul>
+<li>Enter the motor topic (e.g., <code>/motor/lset</code> or <code>/motor/rset</code>) in the <code>/Topic</code> field and click <code>+</code> to add it.</li>
+<li>Control the robot using the keyboard or remote control handle and observe the changes in the motor curve. This can help diagnose motor operation issues.</li>
+</ul>
+</li>
+<li>
+<p><strong>Adjust Display Settings:</strong></p>
+<ul>
+<li>If the display speed is too fast, adjust the X-axis and Y-axis range settings by clicking the appropriate icon.</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-3-adjust-pid-parameters-via-rqt_reconfigure"><a class="header" href="#step-3-adjust-pid-parameters-via-rqt_reconfigure">Step 3: Adjust PID Parameters via <code>rqt_reconfigure</code></a></h2>
+<ol>
+<li>
+<p><strong>Start Dynamic Parameter Adjustment Interface:</strong></p>
+<ul>
+<li>
+<p>Run the following command in the virtual machine terminal:</p>
+<pre><code class="language-bash">rosrun rqt_reconfigure rqt_reconfigure
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Adjust PID Parameters:</strong></p>
+<ul>
+<li>Select <code>JetRacer</code> and adjust the PID parameters as needed. Start with <code>Ki</code>, then <code>Kp</code>, and finally <code>Kd</code> (or set <code>Kd</code> to 0 initially).</li>
+<li>Adjustments will only affect the current session. To make permanent changes, save the parameters to the configuration file (<code>jetracer/cfg/jetracer.cfg</code>).</li>
+</ul>
+<p><strong>Note:</strong> Non-professionals should avoid adjusting PID parameters to prevent abnormal robot behavior or damage.</p>
+</li>
+</ol>
+<h2 id="step-4-view-robot-odometer-information-via-rviz"><a class="header" href="#step-4-view-robot-odometer-information-via-rviz">Step 4: View Robot Odometer Information via RVIZ</a></h2>
+<ol>
+<li>
+<p><strong>Start RVIZ:</strong></p>
+<ul>
+<li>
+<p>In the virtual machine terminal, run the following command:</p>
+<pre><code class="language-bash">rviz
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Add TF Components:</strong></p>
+<ul>
+<li>Add TF components and set the Fixed Frame to <code>odom</code>. You should see the <code>odom</code>, <code>base_footprint</code>, and <code>base_imu_link</code> coordinates.</li>
+<li>Move the robot forward and observe the coordinate changes.</li>
+</ul>
+<p><strong>Note:</strong> If <code>base_footprint</code> rotates, restart the chassis master with the robot in a static state to recalibrate the IMU.</p>
+</li>
+</ol>
+<h2 id="step-5-view-coordinate-relationship-via-tf-tree"><a class="header" href="#step-5-view-coordinate-relationship-via-tf-tree">Step 5: View Coordinate Relationship via TF Tree</a></h2>
+<ol>
+<li>
+<p><strong>Run TF Tree Command:</strong></p>
+<ul>
+<li>
+<p>Re-open a terminal in the virtual machine and run the following command:</p>
+<pre><code class="language-bash">rosrun rqt_tf_tree rqt_tf_tree
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Understand Coordinate Transformations:</strong></p>
+<ul>
+<li>The <code>odom-&gt;base_footprint</code> transformation is issued by the <code>/robot_pose_ekf</code> node.</li>
+<li>The <code>base_footprint-&gt;base_imu_link</code> transformation is issued by the <code>/base_footprint_to_imu</code> node.</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-6-view-robot-imu-information-via-rviz"><a class="header" href="#step-6-view-robot-imu-information-via-rviz">Step 6: View Robot IMU Information via RVIZ</a></h2>
+<ol>
+<li>
+<p><strong>Start RVIZ:</strong></p>
+<ul>
+<li>
+<p>In the virtual machine terminal, run the following command:</p>
+<pre><code class="language-bash">rviz
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Add IMU Component:</strong></p>
+<ul>
+<li>Add the <code>rviz_plugin_tutorials/Imu</code> component and select the <code>/imu</code> topic.</li>
+<li>Enable the box and axes displays, and set the acceleration vector scale to 0.2.</li>
+</ul>
+</li>
+<li>
+<p><strong>Observe IMU Data:</strong></p>
+<ul>
+<li>Rotate or tilt the robot to observe changes in the IMU data displayed in RVIZ.</li>
+</ul>
+<p><strong>Note:</strong> Ensure the IMU is calibrated correctly by keeping the robot still and horizontal during startup. Restart the chassis node if necessary to recalibrate.</p>
+</li>
+</ol>
+<p>By following these steps, you can effectively view and analyze the node topics, data waveforms, PID parameters, odometer information, coordinate relationships, and IMU data for your JetRacer ROS AI Kit.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="robot-odometer-calibration"><a class="header" href="#robot-odometer-calibration">Robot Odometer Calibration</a></h1>
+<h2 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h2>
+<p>The robot can output odometer information to track its traveled distance and turning angles. The default program may have inaccuracies, which can be corrected by calibrating the odometer. This guide will help you achieve higher accuracy, although initial operations can proceed without calibration if precision is not crucial.</p>
+<h2 id="step-1-calibrate-the-linear-velocity"><a class="header" href="#step-1-calibrate-the-linear-velocity">Step 1: Calibrate the Linear Velocity</a></h2>
+<h3 id="1-enable-the-chassis-node"><a class="header" href="#1-enable-the-chassis-node">1. Enable the Chassis Node</a></h3>
+<ol>
+<li>
+<p>Connect to the robot via SSH and open the terminal.</p>
+</li>
+<li>
+<p>Enter the following command to enable the chassis node:</p>
+<pre><code class="language-sh">roslaunch jetracer jetracer.launch
+</code></pre>
+<p><strong>Note:</strong> Ensure the chassis node is not enabled multiple times, as it may cause errors.</p>
+</li>
+</ol>
+<h3 id="2-enable-keyboard-control"><a class="header" href="#2-enable-keyboard-control">2. Enable Keyboard Control</a></h3>
+<ol>
+<li>
+<p>Press <code>Ctrl + Alt + T</code> to open a new terminal.</p>
+</li>
+<li>
+<p>Enter the following command to enable keyboard control of the topic nodes:</p>
+<pre><code class="language-sh">roslaunch jetracer keyboard.launch
+</code></pre>
+</li>
+</ol>
+<h3 id="3-control-the-robot"><a class="header" href="#3-control-the-robot">3. Control the Robot</a></h3>
+<ol>
+<li>Press the <code>I</code> key on the keyboard to move the robot forward.</li>
+<li>Observe if the robot moves in a straight line. If it does not, proceed to the next step to calibrate.</li>
+</ol>
+<h3 id="4-use-rqt_reconfigure-for-calibration"><a class="header" href="#4-use-rqt_reconfigure-for-calibration">4. Use rqt_reconfigure for Calibration</a></h3>
+<ol>
+<li>
+<p>Open a new terminal and run:</p>
+<pre><code class="language-sh">rosrun rqt_reconfigure rqt_reconfigure
+</code></pre>
+</li>
+<li>
+<p>Adjust the <code>servo_bias</code> parameter until the robot moves straight.</p>
+</li>
+<li>
+<p>Save the calibration:</p>
+<pre><code class="language-sh">vi ~/catkin_ws/src/jetracer_ros/cfg/jetracer.cfg
+</code></pre>
+<p>Modify the <code>servo_bias</code> line with the new value.</p>
+</li>
+</ol>
+<h2 id="step-2-linear-velocity-calibration"><a class="header" href="#step-2-linear-velocity-calibration">Step 2: Linear Velocity Calibration</a></h2>
+<h3 id="1-close-previous-chassis-node"><a class="header" href="#1-close-previous-chassis-node">1. Close Previous Chassis Node</a></h3>
+<ol>
+<li>Ensure the previously started chassis node is closed while keeping the robot master node running.</li>
+</ol>
+<h3 id="2-start-linear-velocity-calibration"><a class="header" href="#2-start-linear-velocity-calibration">2. Start Linear Velocity Calibration</a></h3>
+<ol>
+<li>
+<p>Open a terminal in Jetson Nano and run:</p>
+<pre><code class="language-sh">roslaunch jetracer calibrate_linear.launch
+</code></pre>
+<p>Do not close this terminal to keep the calibration option visible.</p>
+</li>
+</ol>
+<h3 id="3-open-dynamic-parameter-configuration"><a class="header" href="#3-open-dynamic-parameter-configuration">3. Open Dynamic Parameter Configuration</a></h3>
+<ol>
+<li>
+<p>In the virtual machine, run:</p>
+<pre><code class="language-sh">rosrun rqt_reconfigure rqt_reconfigure
+</code></pre>
+</li>
+<li>
+<p>Set the following parameters:</p>
+<ul>
+<li><code>test_distance</code>: Default is 1m.</li>
+<li><code>speed</code>: Robot's linear speed.</li>
+<li><code>tolerance</code>: Error margin to reach the goal.</li>
+<li><code>odom_linear_scale_correction</code>: Adjust this based on test results.</li>
+</ul>
+</li>
+</ol>
+<h3 id="4-perform-the-test"><a class="header" href="#4-perform-the-test">4. Perform the Test</a></h3>
+<ol>
+<li>Place the robot on the ground and mark its starting position.</li>
+<li>Check <code>start_test</code> to initiate calibration.</li>
+<li>Measure the actual distance traveled and calculate the correction ratio.</li>
+<li>Adjust <code>odom_linear_scale_correction</code> by multiplying it with the ratio and repeat until the distance is accurate.</li>
+</ol>
+<h3 id="5-save-calibration-parameters"><a class="header" href="#5-save-calibration-parameters">5. Save Calibration Parameters</a></h3>
+<ol>
+<li>
+<p>Open the file to save the new parameters:</p>
+<pre><code class="language-sh">vi ~/catkin_ws/src/jetracer_ros/launch/jetracer.launch
+</code></pre>
+</li>
+<li>
+<p>Modify the <code>linear_correction</code> value.</p>
+</li>
+</ol>
+<h2 id="step-3-angular-velocity-calibration"><a class="header" href="#step-3-angular-velocity-calibration">Step 3: Angular Velocity Calibration</a></h2>
+<h3 id="1-initial-setup"><a class="header" href="#1-initial-setup">1. Initial Setup</a></h3>
+<ol>
+<li>
+<p>Unplug the motor wire to keep the motor in a free state.</p>
+</li>
+<li>
+<p>Modify the parameters to set servo control to <code>y = x</code>:</p>
+<pre><code class="language-sh">vi ~/catkin_ws/src/jetracer_ros/cfg/jetracer.cfg
+</code></pre>
+<p>Set <code>servo_bias</code> to 0.</p>
+<pre><code class="language-sh">vi ~/catkin_ws/src/jetracer_ros/launch/jetracer.launch
+</code></pre>
+<p>Set <code>coefficient_a</code>, <code>coefficient_b</code>, <code>coefficient_d</code> to 0, and <code>coefficient_c</code> to 1.</p>
+</li>
+</ol>
+<h3 id="2-enable-the-chassis-node"><a class="header" href="#2-enable-the-chassis-node">2. Enable the Chassis Node</a></h3>
+<ol>
+<li>
+<p>Connect via SSH and run:</p>
+<pre><code class="language-sh">roslaunch jetracer jetracer.launch
+</code></pre>
+</li>
+</ol>
+<h3 id="3-enable-topic-publishing"><a class="header" href="#3-enable-topic-publishing">3. Enable Topic Publishing</a></h3>
+<ol>
+<li>
+<p>Run the following command:</p>
+<pre><code class="language-sh">rosrun rqt_publisher rqt_publisher
+</code></pre>
+</li>
+<li>
+<p>Add <code>/cmd_vel</code> topic information.</p>
+</li>
+</ol>
+<h3 id="4-measure-turning-diameter"><a class="header" href="#4-measure-turning-diameter">4. Measure Turning Diameter</a></h3>
+<ol>
+<li>Set <code>/cmd_vel.angular.z</code> to <code>-1</code> and gradually increase to <code>1</code>, recording the turning diameter at each value.</li>
+</ol>
+<h3 id="5-fit-the-polynomial"><a class="header" href="#5-fit-the-polynomial">5. Fit the Polynomial</a></h3>
+<ol>
+<li>
+<p>Update the program with actual measurements:</p>
+<pre><code class="language-sh">vi ~/catkin_ws/src/jetracer_ros/scripts/servo_calibratin.py
+</code></pre>
+</li>
+<li>
+<p>Run the calibration script:</p>
+<pre><code class="language-sh">python ~/catkin_ws/src/jetracer_ros/scripts/servo_calibratin.py
+</code></pre>
+</li>
+</ol>
+<h3 id="6-save-fitting-parameters"><a class="header" href="#6-save-fitting-parameters">6. Save Fitting Parameters</a></h3>
+<ol>
+<li>
+<p>Open the launch file and save the new parameters:</p>
+<pre><code class="language-sh">vi ~/catkin_ws/src/jetracer_ros/launch/jetracer.launch
+</code></pre>
+</li>
+<li>
+<p>Convert scientific notation to floating-point numbers if necessary.</p>
+</li>
+</ol>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>After successful calibration, the robot should move in a straight line and handle turns accurately. Adjust the <code>servo_bias</code> or <code>d</code> parameter if further fine-tuning is required.</p>
 
                     </main>
 

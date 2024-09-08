@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Software</title>
+        <title>ROS Node Topics</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../01_Hardware/index.html"><strong aria-hidden="true">1.</strong> Hardware</a></li><li class="chapter-item expanded "><a href="../02_Sofwware/index.html" class="active"><strong aria-hidden="true">2.</strong> Software</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../00_installation/01_ros-installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../01_hardware/index.html"><strong aria-hidden="true">2.</strong> Hardware</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../01_hardware/01_pcb.html"><strong aria-hidden="true">2.1.</strong> PCB</a></li><li class="chapter-item expanded "><a href="../01_hardware/02_schematic.html"><strong aria-hidden="true">2.2.</strong> Schematic</a></li></ol></li><li class="chapter-item expanded "><a href="../02_software/index.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded "><a href="../03_tutorials/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../03_tutorials/01_vehicle-movement-control.html"><strong aria-hidden="true">4.1.</strong> Vehicle Movement Control</a></li><li class="chapter-item expanded "><a href="../03_tutorials/02_ros-node-topics.html" class="active"><strong aria-hidden="true">4.2.</strong> ROS Node Topics</a></li><li class="chapter-item expanded "><a href="../03_tutorials/03_odometer-calibration.html"><strong aria-hidden="true">4.3.</strong> Odometer Calibration</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -173,16 +173,172 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="software"><a class="header" href="#software">Software</a></h1>
+                        <h1 id="viewing-node-topics-with-ros"><a class="header" href="#viewing-node-topics-with-ros">Viewing Node Topics with ROS</a></h1>
+<p>This comprehensive tutorial will guide you through the process of viewing node topics with ROS using the JetRacer ROS AI Kit. The steps include checking node topics, displaying data waveforms, adjusting PID parameters, viewing robot odometer information, understanding coordinate relationships, and viewing IMU information.</p>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ol>
+<li>Ensure you have completed the previous tutorials on assembling the JetRacer, installing the Jetson Nano image, installing the Ubuntu virtual image, configuring multi-machine communication, and controlling robot movement.</li>
+<li>Ensure your JetRacer and computer are connected to the same WiFi network.</li>
+</ol>
+<h2 id="step-1-check-node-topics"><a class="header" href="#step-1-check-node-topics">Step 1: Check Node Topics</a></h2>
+<ol>
+<li>
+<p><strong>Start the Robot Chassis Node:</strong></p>
+<ul>
+<li>
+<p>Connect to the JetRacer via SSH to open the terminal.</p>
+</li>
+<li>
+<p>Enter the following command to start the robot chassis node:</p>
+<pre><code class="language-bash">roslaunch jetracer jetracer.launch
+</code></pre>
+<p><strong>Note:</strong> The robot chassis node cannot be restarted repeatedly. If the previous chassis node is not closed, it does not need to be restarted.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>View Chassis Node Topics:</strong></p>
+<ul>
+<li>
+<p>Open the terminal in the Ubuntu virtual machine.</p>
+</li>
+<li>
+<p>Enter the following command to view the topics of the chassis node:</p>
+<pre><code class="language-bash">rostopic list
+</code></pre>
+<p>If the topics are displayed correctly, it means that multi-device communication is successful. If not, check the IP and hostname configurations and ensure both devices are on the same WiFi network.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-2-display-data-waveform-via-rqt_plot"><a class="header" href="#step-2-display-data-waveform-via-rqt_plot">Step 2: Display Data Waveform via <code>rqt_plot</code></a></h2>
+<ol>
+<li>
+<p><strong>Open <code>rqt_plot</code>:</strong></p>
+<ul>
+<li>
+<p>In the virtual machine terminal, run the following command to open the data waveform display tool:</p>
+<pre><code class="language-bash">rosrun rqt_plot rqt_plot
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Add Motor Topics:</strong></p>
+<ul>
+<li>Enter the motor topic (e.g., <code>/motor/lset</code> or <code>/motor/rset</code>) in the <code>/Topic</code> field and click <code>+</code> to add it.</li>
+<li>Control the robot using the keyboard or remote control handle and observe the changes in the motor curve. This can help diagnose motor operation issues.</li>
+</ul>
+</li>
+<li>
+<p><strong>Adjust Display Settings:</strong></p>
+<ul>
+<li>If the display speed is too fast, adjust the X-axis and Y-axis range settings by clicking the appropriate icon.</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-3-adjust-pid-parameters-via-rqt_reconfigure"><a class="header" href="#step-3-adjust-pid-parameters-via-rqt_reconfigure">Step 3: Adjust PID Parameters via <code>rqt_reconfigure</code></a></h2>
+<ol>
+<li>
+<p><strong>Start Dynamic Parameter Adjustment Interface:</strong></p>
+<ul>
+<li>
+<p>Run the following command in the virtual machine terminal:</p>
+<pre><code class="language-bash">rosrun rqt_reconfigure rqt_reconfigure
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Adjust PID Parameters:</strong></p>
+<ul>
+<li>Select <code>JetRacer</code> and adjust the PID parameters as needed. Start with <code>Ki</code>, then <code>Kp</code>, and finally <code>Kd</code> (or set <code>Kd</code> to 0 initially).</li>
+<li>Adjustments will only affect the current session. To make permanent changes, save the parameters to the configuration file (<code>jetracer/cfg/jetracer.cfg</code>).</li>
+</ul>
+<p><strong>Note:</strong> Non-professionals should avoid adjusting PID parameters to prevent abnormal robot behavior or damage.</p>
+</li>
+</ol>
+<h2 id="step-4-view-robot-odometer-information-via-rviz"><a class="header" href="#step-4-view-robot-odometer-information-via-rviz">Step 4: View Robot Odometer Information via RVIZ</a></h2>
+<ol>
+<li>
+<p><strong>Start RVIZ:</strong></p>
+<ul>
+<li>
+<p>In the virtual machine terminal, run the following command:</p>
+<pre><code class="language-bash">rviz
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Add TF Components:</strong></p>
+<ul>
+<li>Add TF components and set the Fixed Frame to <code>odom</code>. You should see the <code>odom</code>, <code>base_footprint</code>, and <code>base_imu_link</code> coordinates.</li>
+<li>Move the robot forward and observe the coordinate changes.</li>
+</ul>
+<p><strong>Note:</strong> If <code>base_footprint</code> rotates, restart the chassis master with the robot in a static state to recalibrate the IMU.</p>
+</li>
+</ol>
+<h2 id="step-5-view-coordinate-relationship-via-tf-tree"><a class="header" href="#step-5-view-coordinate-relationship-via-tf-tree">Step 5: View Coordinate Relationship via TF Tree</a></h2>
+<ol>
+<li>
+<p><strong>Run TF Tree Command:</strong></p>
+<ul>
+<li>
+<p>Re-open a terminal in the virtual machine and run the following command:</p>
+<pre><code class="language-bash">rosrun rqt_tf_tree rqt_tf_tree
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Understand Coordinate Transformations:</strong></p>
+<ul>
+<li>The <code>odom-&gt;base_footprint</code> transformation is issued by the <code>/robot_pose_ekf</code> node.</li>
+<li>The <code>base_footprint-&gt;base_imu_link</code> transformation is issued by the <code>/base_footprint_to_imu</code> node.</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-6-view-robot-imu-information-via-rviz"><a class="header" href="#step-6-view-robot-imu-information-via-rviz">Step 6: View Robot IMU Information via RVIZ</a></h2>
+<ol>
+<li>
+<p><strong>Start RVIZ:</strong></p>
+<ul>
+<li>
+<p>In the virtual machine terminal, run the following command:</p>
+<pre><code class="language-bash">rviz
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Add IMU Component:</strong></p>
+<ul>
+<li>Add the <code>rviz_plugin_tutorials/Imu</code> component and select the <code>/imu</code> topic.</li>
+<li>Enable the box and axes displays, and set the acceleration vector scale to 0.2.</li>
+</ul>
+</li>
+<li>
+<p><strong>Observe IMU Data:</strong></p>
+<ul>
+<li>Rotate or tilt the robot to observe changes in the IMU data displayed in RVIZ.</li>
+</ul>
+<p><strong>Note:</strong> Ensure the IMU is calibrated correctly by keeping the robot still and horizontal during startup. Restart the chassis node if necessary to recalibrate.</p>
+</li>
+</ol>
+<p>By following these steps, you can effectively view and analyze the node topics, data waveforms, PID parameters, odometer information, coordinate relationships, and IMU data for your JetRacer ROS AI Kit.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../01_Hardware/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../03_tutorials/01_vehicle-movement-control.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="../03_tutorials/03_odometer-calibration.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -190,10 +346,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../01_Hardware/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../03_tutorials/01_vehicle-movement-control.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="../03_tutorials/03_odometer-calibration.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
