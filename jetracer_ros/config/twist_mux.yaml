@@ -1,0 +1,24 @@
+# jetracer_ros/config/twist_mux.yaml
+# Priority configuration for the proposed twist_mux arbitration
+
+topics:
+  - name: safety
+    topic: /cmd_vel_safety
+    timeout: 0.5
+    priority: 100
+  - name: teleop
+    topic: /cmd_vel_teleop
+    timeout: 0.5
+    priority: 50
+  - name: behavior
+    topic: /cmd_vel_behavior
+    timeout: 0.5
+    priority: 20
+  - name: nav
+    topic: /cmd_vel_nav
+    timeout: 0.5
+    priority: 10
+  - name: lane
+    topic: /cmd_vel_lane
+    timeout: 0.5
+    priority: 5

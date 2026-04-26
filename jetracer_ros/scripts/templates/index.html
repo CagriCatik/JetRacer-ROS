@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Live Streaming</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f6f8;
+        }
+
+        .stream-card {
+            max-width: 900px;
+            margin: 3rem auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+        }
+
+        .stream-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .stream-title {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .stream-status {
+            font-size: 0.9rem;
+            color: #198754;
+        }
+
+        .video-wrapper {
+            background: #000;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .stream-footer {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+            border-top: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <section class="stream-card">
+            <header class="stream-header d-flex justify-content-between align-items-center">
+                <h1 class="stream-title">Live Streaming</h1>
+                <span class="stream-status">● Live</span>
+            </header>
+
+            <div class="video-wrapper">
+                <img src="{{ url_for('video_feed') }}" alt="Live video stream">
+            </div>
+
+            <footer class="stream-footer">
+                Camera feed is being streamed in real time.
+            </footer>
+        </section>
+    </main>
+</body>
+
+</html>

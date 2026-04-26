@@ -1,0 +1,6 @@
+# jetracer_ros/config/control.yaml
+# TODO: Proposed configuration for a future cmd_vel_to_jetracer_control_node.py
+
+control:
+  timeout: 0.5 # Seconds before stopping if no command received
+  rate: 30.0   # Control loop rate in Hz

@@ -1,0 +1,15 @@
+# jetracer_ros/config/calibration.yaml
+# TODO: Adjust these values based on actual JetRacer hardware calibration.
+
+steering:
+  center: 0.0
+  min: -1.0
+  max: 1.0
+  trim: -0.16 # Example trim from racecar.py
+
+throttle:
+  min: -1.0
+  max: 1.0
+  deadband: 0.05
+  max_forward: 0.65 # Limit speed for safety
+  max_reverse: 0.4

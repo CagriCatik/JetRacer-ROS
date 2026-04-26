@@ -1,0 +1,8 @@
+# jetracer_ros/config/camera.yaml
+# Configuration for the CSI Camera node
+
+camera:
+  width: 1280
+  height: 720
+  fps: 30
+  flip_method: 0 # 0 for standard, 2 if camera is mounted upside down

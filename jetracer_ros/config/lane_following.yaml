@@ -1,0 +1,80 @@
+lane_following:
+  enabled: true
+
+  image:
+    input_topic: /camera/image_raw
+    resize_width: 640
+    resize_height: 480
+    roi_y_min: 240
+    roi_y_max: 480
+
+  bev:
+    enabled: true
+    # Source points in original image pixel coordinates.
+    # These must be calibrated on the real camera.
+    src_points:
+      - [220, 300]
+      - [420, 300]
+      - [620, 470]
+      - [20, 470]
+    # Destination points in BEV pixel coordinates.
+    dst_points:
+      - [160, 0]
+      - [480, 0]
+      - [480, 480]
+      - [160, 480]
+    output_width: 640
+    output_height: 480
+
+  threshold:
+    use_hls: true
+    use_hsv: false
+    use_gradient: true
+    # These values are initial placeholders.
+    # They must be calibrated under real lighting.
+    hls_s_min: 80
+    hls_s_max: 255
+    hls_l_min: 120
+    hls_l_max: 255
+    gradient_min: 30
+    gradient_max: 120
+
+  sliding_window:
+    num_windows: 9
+    margin: 60
+    minpix: 40
+    min_lane_pixels: 300
+    use_previous_fit: true
+    max_fit_age: 5
+
+  lane_model:
+    lane_width_m: 0.35
+    xm_per_pix: 0.0015
+    ym_per_pix: 0.0030
+    min_confidence: 0.4
+
+  waypoints:
+    output_topic: /lane/waypoints
+    frame_id: base_link
+    count: 10
+    lookahead_index: 4
+    min_distance_m: 0.2
+    max_distance_m: 1.5
+
+  control:
+    publish_cmd_vel: true
+    output_topic: /cmd_vel_lane
+    speed: 0.25
+    max_speed: 0.35
+    min_speed: 0.0
+    max_steering: 0.8
+    steering_kp: 1.2
+    steering_kd: 0.05
+    command_timeout: 0.5
+
+  debug:
+    publish_debug_image: true
+    publish_bev_image: true
+    debug_image_topic: /lane/debug_image
+    bev_image_topic: /lane/bev_image
+    status_topic: /lane/status

@@ -1,0 +1,16 @@
+<launch>
+  <arg name="start_camera" default="false" />
+  <arg name="config_file" default="$(find jetracer_ros)/config/lane_following.yaml" />
+
+  <rosparam file="$(arg config_file)" command="load" />
+
+  <group if="$(arg start_camera)">
+    <include file="$(find jetracer_ros)/launch/camera.launch" />
+  </group>
+
+  <node
+    pkg="jetracer_ros"
+    type="lane_following_node.py"
+    name="lane_following_node"
+    output="screen" />
+</launch>

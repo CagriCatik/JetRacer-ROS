@@ -1,0 +1,20 @@
+# Catkin custom files
+build/
+devel/
+install/
+logs/
+.catkin_workspace
+.ros/
+
+# Python artifacts
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.cache/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*~
